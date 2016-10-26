@@ -1,3 +1,46 @@
+ <link rel="import" href="../../bower_components/iron-image/iron-image.html">
+ <link rel="import" href="dialog-box-module.html">
+ <link rel="import" href="message-profile-module.html">
+ <link rel="import" href="../../bower_components/iron-a11y-keys/iron-a11y-keys.html">
+ <link rel="import" href="../../bower_components/paper-card/paper-card.html">
+ <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+ 
+<script src="../../bower_components/webcomponentsjs/webcomponents.js"></script>
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-grid/iron-grid.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
@@ -11,6 +54,9 @@
             width:36px;
             height:36px;
             border-radius:50%;
+            background:#9e9e9e center center no-repeat;
+            background-size:contain;
+            position:relative;
         }
         #card {
             vertical-align:middle;
@@ -39,7 +85,7 @@
             float:left;
         }
         #searchInput {
-            width: 90%;
+            width: 100%;
             margin:0;
         }
         #profiles {
@@ -108,18 +154,16 @@
                 </paper-input>
             </paper-toolbar>
             <div id="profiles"> 
-                <message-profile-module imgsrc="images/favicon.ico" name="Batyan" time="13:37" msglast="allo batyan" newmessage="8"></message-profile-module>
-                <message-profile-module imgsrc="http://orig02.deviantart.net/7975/f/2011/028/3/8/gopnik_by_spycrap-d388ybi.jpg" name="Vasyan" time="12:38" msglast="Otdai kosar batyanu pls" newmessage="1"></message-profile-module>
-                <message-profile-module imgsrc="http://orig02.deviantart.net/7975/f/2011/028/3/8/gopnik_by_spycrap-d388ybi.jpg" name="Kolyan" time="13:56" msglast="Batyan kosar prosit" newmessage="0"></message-profile-module>
+                <message-profile-module imgsrc="images/favicon.ico" name="b" time="13:37" msglast="allo" newmessage="8"></message-profile-module>
             </div>
         </div>
         <div id="dialogBox">
            <paper-toolbar>
                <paper-icon-button icon="icons:arrow-back"></paper-icon-button>
                 <paper-icon-item class="title">
-                   <iron-image src="../../images/favicon.ico" id="profileImage" item-icon sizing="cover"></iron-image>
+                   <div style="background-image:url(../../images/favicon.ico)" id="profileImage" item-icon></div>
                     <paper-item-body two-line>
-                        <div>Batyan</div>
+                        <div>B</div>
                         <div secondary>Online</div>
                     </paper-item-body>
                 </paper-icon-item>
@@ -127,10 +171,7 @@
            </paper-toolbar>
             <hr>
            <div id="messages">
-                 <dialog-box-module name = "Batyan" imgsrc="images/favicon.ico" text="Bistro otdal moy kosar ya uzhe 15 chasov ego zhdu aaaaa dai moi kosar aaa" time = "13:37" watched="true"></dialog-box-module>
-                 <dialog-box-module name = "Batyan" imgsrc="images/favicon.ico" text="Zhdat ne mogu reshe" time = "13:35" watched="true"></dialog-box-module>а
-                 <dialog-box-module name = "Batyan" imgsrc="images/favicon.ico" text="Ne nu seryozno" time = "13:32" watched="true"></dialog-box-module>
-                <dialog-box-module name = "YOBA" imgsrc="https://lh5.ggpht.com/6G3wCupIFZy1NuiSYiGzPcPIj3PCyfB5wFb9wV-9tsayloSA_pVfb6TTWU1rgddo0A=w300" text="Bratan zaimi kosar" time = "08:32" watched="true"></dialog-box-module>
+                 <dialog-box-module name = "b" imgsrc="images/favicon.ico" text="a" time = "13:37" watched="true"></dialog-box-module>
            </div>
             <div id="input">
                 <paper-input label="Your message" no-label-float id="paperInput" maxlength="50">
