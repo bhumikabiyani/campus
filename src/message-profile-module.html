@@ -1,0 +1,72 @@
+<dom-module id="message-profile-module">
+  <template>
+    <style include="wrapper-module">
+        .rounded {
+            border-radius:50%;
+        }
+        #time {
+            color:#777;
+        }
+        hr {
+            width:95%;
+            height:1px;
+            background-color:#DDD;
+            border:0;
+        }
+        #newMessages {
+            color:#DB4437
+            --iron-icon-width:16px;
+            --iron-icon-height:16px;
+        }
+        #messageCount {
+            color:#DB4437;
+            font-size:12px;
+        }
+        iron-image {
+            width:48px;
+            height:48px;
+        }
+        paper-item {
+            --paper-item :{
+                white-space: nowrap;
+                width:100%;
+            }
+        }
+    </style>
+    <paper-icon-item>
+       <iron-image sizing="cover" class="rounded" src="{{imgsrc}}" item-icon></iron-image>
+        <paper-item-body two-line>
+            <div>[[name]]</div>
+            <div secondary>[[msglast]]</div>
+        </paper-item-body>
+        <div id="time">[[time]] <br></div>
+        <div id="messages">
+            <iron-icon icon="icons:markunread" id="newMessages"></iron-icon>
+            <span id="messageCount"></span>
+        </div>
+    </paper-icon-item>
+    <hr>
+  </template>
+  <script>
+    Polymer({
+      is: 'message-profile-module',
+        properties: {
+            imgsrc : String,
+            msglast : String,
+            time : String,
+            name : String,
+            identifier : String,
+            newmessage : String
+        },
+        ready : function() {
+            if(this.newmessage != "0") {
+                this.$.messageCount.textContent = this.newmessage;
+            }
+            else {
+                this.$.newMessages.style.width="0px";
+                this.$.messageCount.style.width="0px";
+            }
+        }
+    })
+  </script>
+</dom-module>

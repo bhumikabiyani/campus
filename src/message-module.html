@@ -1,0 +1,227 @@
+ <link rel="import" href="../../bower_components/iron-image/iron-image.html">
+ <link rel="import" href="dialog-box-module.html">
+ <link rel="import" href="message-profile-module.html">
+ <link rel="import" href="../../bower_components/iron-a11y-keys/iron-a11y-keys.html">
+ <link rel="import" href="../../bower_components/paper-card/paper-card.html">
+ <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+ 
+<script src="../../bower_components/webcomponentsjs/webcomponents.js"></script>
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-grid/iron-grid.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
+ <dom-module id="message-module">
+  <template>
+    <style include="wrapper-module">
+        #profileImage {
+            width:36px;
+            height:36px;
+            border-radius:50%;
+        }
+        #card {
+            vertical-align:middle;
+            margin-left:15%;
+            margin-top:70px;
+            width:70%;
+            padding:15px;
+        }
+        .card-content {
+            height:80%;
+        }
+        hr {
+            width:100%;
+            height: 1px;
+            border: 0;
+            background:#DDD;
+        }
+        .toolbarTop {
+            width:100%;
+            height:auto;
+            padding-left:3px;
+        }
+        #dialogs {
+            width:45%;
+            height:100%;
+            float:left;
+        }
+        #searchInput {
+            width: 90%;
+            margin:0;
+        }
+        #profiles {
+            margin-top:3px;
+            margin-left:3px;
+        }
+        .verticalRule {
+            width:1px;
+            height:500px;
+            background-color:#BABABA;
+            margin:5px;
+        }
+        #dialogBox {
+            width:54.8%;
+            height:500px;
+            float:right;
+            border-left-color: #DDD;
+            border-left-style: solid;
+            border-left-width: 1px;
+        }
+        #groupName {
+            text-align:center;
+        }
+        paper-toolbar {
+            --paper-toolbar-background:#FFFFFF;
+            color:#212121;
+        }
+        #messages {
+            height:70%;
+            margin-left:5px;
+            margin-top:5px;
+        }
+
+        #more {
+            float:right;
+        }
+        
+        #paperInput {
+            color:#323232; 
+            width:95%; 
+            margin-left:5%;
+        }
+        paper-icon-button {
+            color:#222;
+        }
+        #settings {
+            vertical-align: bottom;
+        }
+        #profiles {
+            height:80%;
+        }
+        paper-item {
+            --paper-item :{
+                white-space: nowrap;
+                width:100%;
+            }
+        }
+    </style>
+    
+    <paper-card id="card">
+        <div id="dialogs">
+            <paper-toolbar>
+                <paper-input label="Search" no-label-float id="searchInput" maxlength="50">
+                    <paper-icon-button icon="icons::search" suffix></paper-icon-button>
+                    <paper-icon-button icon="editor:mode-edit" suffix></paper-icon-button>
+                </paper-input>
+            </paper-toolbar>
+            <div id="profiles"> 
+                <message-profile-module imgsrc="images/favicon.ico" name="Batyan" time="13:37" msglast="allo batyan" newmessage="8"></message-profile-module>
+                <message-profile-module imgsrc="http://orig02.deviantart.net/7975/f/2011/028/3/8/gopnik_by_spycrap-d388ybi.jpg" name="Vasyan" time="12:38" msglast="Otdai kosar batyanu pls" newmessage="1"></message-profile-module>
+                <message-profile-module imgsrc="http://orig02.deviantart.net/7975/f/2011/028/3/8/gopnik_by_spycrap-d388ybi.jpg" name="Kolyan" time="13:56" msglast="Batyan kosar prosit" newmessage="0"></message-profile-module>
+            </div>
+        </div>
+        <div id="dialogBox">
+           <paper-toolbar>
+               <paper-icon-button icon="icons:arrow-back"></paper-icon-button>
+                <paper-icon-item class="title">
+                   <iron-image src="../../images/favicon.ico" id="profileImage" item-icon sizing="cover"></iron-image>
+                    <paper-item-body two-line>
+                        <div>Batyan</div>
+                        <div secondary>Online</div>
+                    </paper-item-body>
+                </paper-icon-item>
+                <paper-icon-button icon="icons::more-horiz"></paper-icon-button>
+           </paper-toolbar>
+            <hr>
+           <div id="messages">
+                 <dialog-box-module name = "Batyan" imgsrc="images/favicon.ico" text="Bistro otdal moy kosar ya uzhe 15 chasov ego zhdu aaaaa dai moi kosar aaa" time = "13:37" watched="true"></dialog-box-module>
+                 <dialog-box-module name = "Batyan" imgsrc="images/favicon.ico" text="Zhdat ne mogu reshe" time = "13:35" watched="true"></dialog-box-module>а
+                 <dialog-box-module name = "Batyan" imgsrc="images/favicon.ico" text="Ne nu seryozno" time = "13:32" watched="true"></dialog-box-module>
+                <dialog-box-module name = "YOBA" imgsrc="https://lh5.ggpht.com/6G3wCupIFZy1NuiSYiGzPcPIj3PCyfB5wFb9wV-9tsayloSA_pVfb6TTWU1rgddo0A=w300" text="Bratan zaimi kosar" time = "08:32" watched="true"></dialog-box-module>
+           </div>
+            <div id="input">
+                <paper-input label="Your message" no-label-float id="paperInput" maxlength="50">
+                   <paper-icon-button icon="icons::link" id="linkBtn" prefix></paper-icon-button>
+                    <paper-icon-button icon="editor:insert-emoticon" suffix></paper-icon-button>
+                    <iron-a11y-keys id="keys" keys="enter" target="[[target]]" on-keys-pressed="sendMessage"></iron-a11y-keys>
+                    <paper-icon-button icon="send" suffix on-tap="sendMessage"></paper-icon-button>
+                </paper-input>
+            </div>
+        </div>
+    </paper-card>
+  </template>
+  <script>
+    Polymer({
+      is: 'message-module',
+      behaviors:[
+          
+      ],
+        
+        properties: {
+            target: {
+                type: Object,
+                value: function() {
+                    return document.body;
+                }
+            },
+            dialogs : Array,
+            messages : Array,
+            currentdialog : String,
+            isonline : String,
+            currentdialogimage : String
+        },
+        
+        ready: function(){ //ZAGRUZKA AVATAROK (DIALOGOV)
+            //POLUCHAEM S DATABASE
+            //ZAPOLNYAEM MASSIV DIALOGS
+        },
+        loadDialog : function(item) { //ZAGRUZKA SOOBSHENII
+            //POLUCHAEM S DATABASE
+            //ZAPOLNYAEM MASSIV MESSAGES
+            //UPDATE CURRENTDIALOG && ISONLINE && CURRENTDIALOGIMAGE
+        },
+        sendMessage : function() {
+            //POLUCHAEM S INPUTA MESSAGE
+            //OTPRAVLYAEM NA DATABASE
+            //UPDATE
+        },
+        //+ NUZHNO UPDATE ZAPILIT
+    })
+  </script>
+</dom-module>
