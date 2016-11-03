@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+ <dom-module id="task-box">
+  <template>
+    <style include="wrapper-module">
+        #taskLabel {
+            color:#FFFFFF;
+            float:left;
+        }
+        .right {
+            float:right;
+            color:#FFFFFF;
+        }
+        #box {
+            display : flex;
+            align-items : center;
+        }
+    </style>
+    <div id="box">
+        <span id="taskLabel">[[task]] &nbsp; &nbsp;</span>
+        <paper-checkbox class="right" id="check"></paper-checkbox>
+        <paper-icon-button icon="delete" class="right" on-tap="delete"></paper-icon-button>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'task-box',
+        properties : {
+            task : String,
+            isready : String,
+            index : String
+        },
+        
+        ready : function () {
+            this.$.check.checked = this.isready;
+        },
+        delete : function() {
+            this.domHost.removeBox(this.index);
+        }
+    })
+  </script>
+</dom-module>

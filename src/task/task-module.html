@@ -1,0 +1,148 @@
+<link rel="import" href="task-card.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/iron-dropdown/iron-dropdown.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+  <link rel="import" href="../../bower_components/neon-animation/animations/scale-up-animation.html">
+  <link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+  <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+  <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+  <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+  <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+  <link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
+ <dom-module id="task-module">
+  <template>
+    <style include="wrapper-module">
+        paper-fab {
+            position: fixed;
+            margin-left: 10px;
+            margin-right:10px;
+            margin-bottom:10px;
+            position:fixed;
+            right:25px;
+            bottom:25px;
+            --paper-fab-background:#303F9F;
+        }
+        paper-dialog {
+            padding:1%;
+            width:50%;
+        }
+        paper-button {
+            width:25%;
+            margin-left:37.5%;
+            height:48px;
+        }
+        
+        hr {
+            color:#777;
+            border:0;
+        }
+        #nothing {
+            position:absolute;
+            color:#BDBDBD;
+            display:inline-block;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            margin:auto;
+            width:80%;
+            height:200px;
+        }
+        .title {
+            margin: 0 auto;
+            text-align:center;
+            line-height:200px;
+        }
+    </style>
+    <task-card id="art" lesson="Art" class="tCard" color="#C2185B"></task-card>
+    <task-card id="bio" lesson="Biology" class="tCard" color="#689F38"></task-card>
+    <task-card id="chem" lesson="Chemistry" class="tCard" color="#1976D2" ></task-card>
+    <task-card id="eco" lesson="Economics" class="tCard" color="#0288D1" ></task-card>
+    <task-card id="english" lesson="English" class="tCard" color="#D32F2F" ></task-card>
+    <task-card id="gp" lesson="Global persp." class="tCard" color="#303F9F" ></task-card>
+    <task-card id="hist" lesson="Global history" class="tCard" color="#E65100" ></task-card>
+    <task-card id="kzhist" lesson="Kazakh history" class="tCard" color="#EF6C00" ></task-card>
+    <task-card id="kzlit" lesson="Kazakh literature" class="tCard" color="#7B1FA2" ></task-card>
+    <task-card id="math" lesson="Mathematics" class="tCard" color="#512DA8" ></task-card>
+    <task-card id="milit" lesson="Military educ." class="tCard" color="#00796B" ></task-card>
+    <task-card id="pe" lesson="Physical educ." class="tCard" color="#0097A7" ></task-card>
+    <task-card id="law" lesson="Foundations of law" class="tCard" color="#607D8B" ></task-card>
+    <task-card id="ruslit" lesson="Russian literature" class="tCard" color="#558B2F" ></task-card>
+    <task-card id="geo" lesson="Geography" class="tCard" color="#388E3C" ></task-card>
+    <task-card id="phys" lesson="Physics" class="tCard" color="#FF5722" ></task-card>
+    <task-card id="ruslang" lesson="Russian language" class="tCard" color="#EF5350" ></task-card>
+    <task-card id="kzlang" lesson="Kazakh language" class="tCard" color="#F44336" ></task-card>
+    <task-card id="other" lesson="Other" class="tCard" color="#F44336"></task-card>
+    <div id="fab">
+        <paper-fab id="addFab" icon="icons::add" on-tap="openDrop"></paper-fab>
+        <paper-dialog entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop id="create">
+            <paper-dropdown-menu label="Lesson" id="lessonPick">
+                <paper-listbox class="dropdown-content" selected="0">
+                    <paper-item>Art<hr></paper-item>
+                    <paper-item>Biology<hr></paper-item>
+                    <paper-item>Chemistry<hr></paper-item>
+                    <paper-item>Economics<hr></paper-item>
+                    <paper-item>English language<hr></paper-item>
+                    <paper-item>Global persp.<hr></paper-item>
+                    <paper-item>Global history<hr></paper-item>
+                    <paper-item>Kazakh history<hr></paper-item>
+                    <paper-item>Kazakh language<hr></paper-item>
+                    <paper-item>Kazakh literature<hr></paper-item>
+                    <paper-item>Mathematics<hr></paper-item>
+                    <paper-item>Military educ.<hr></paper-item>
+                    <paper-item>Physical educ.<hr></paper-item>
+                    <paper-item>Foundations of law<hr></paper-item>
+                    <paper-item>Russian literature<hr></paper-item>
+                    <paper-item>Russian language<hr></paper-item>
+                    <paper-item>Geography<hr></paper-item>
+                    <paper-item>Physics<hr></paper-item>
+                    <paper-item>Other<hr></paper-item>
+                </paper-listbox>
+            </paper-dropdown-menu>
+            <paper-input 
+                id="obj" label="Objective" char-counter maxlength="40" minlength="5" auto-validate error-message="At least 10 chars">
+            </paper-input>
+            <paper-checkbox id="markAsDone">Mark as done?</paper-checkbox><br>
+            <paper-button raised on-tap="createTask">Send</paper-button>
+        </paper-dialog>
+    </div>
+    <div id="nothing">
+        <div class="title"><iron-icon icon="help-outline" on-tap="toggleHelp"></iron-icon>&nbsp;Nothing over there...</div>
+        <paper-dialog id="help" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+            <span>
+                Add some tasks to make this page more colorful! &nbsp;
+                <iron-icon icon="editor:insert-emoticon"></iron-icon>
+            </span>
+        </paper-dialog>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'task-module',
+        openDrop : function() {
+            this.$.create.open();
+        },
+        toggleHelp : function() {
+            this.$.help.toggle();  
+        },
+        createTask : function() {
+            if(this.$.obj.invalid) return; //PROVERKA NA VALIDNOST INPUTA
+            
+            var dictionary = {"Art":"art", "Biology":"bio", "Chemistry":"chem", "Economics":"eco", "English language":"english", "Global persp.":"gp", "Global history":"hist", "Kazakh history":"kzhist", "Kazakh language":"kzlang", "Kazakh literature":"kzlit", "Mathematics":"math", "Military educ.":"milit", "Physical educ.":"pe", "Foundations of law":"law", "Russian literature":"ruslit", "Russian language":"ruslang", "Geography":"geo", "Physics":"phys", "Other":"other"};
+            
+            var lesson = this.$.lessonPick.selectedItem.textContent; //POLUCHAEM LESSON
+            var task = this.$.obj.value; //POLUCHAEM TASK
+            var isDone = this.$.markAsDone.checked; //POLUCHAEM CHECKED
+            this.shadowRoot.querySelector("#" + dictionary[lesson]).addToArray(task, isDone);
+            //Dobavit vzaimodeistvie s firebase, zdes:
+            //task - to chto on hochet sdelat
+            //lesson - urok po kotoromu on eto delaet
+            //isDone - sdelan li
+            //important - vazhnost
+            this.$.create.close();
+            this.$.obj.value = "";
+        }
+    })
+  </script>
+</dom-module>

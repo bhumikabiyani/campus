@@ -1,0 +1,67 @@
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="task-box.html">
+ <dom-module id="task-card">
+  <template>
+    <style include="wrapper-module">
+        paper-card {
+            --paper-card-header-color:white;
+            vertical-align: top;
+        }
+        #card {
+            max-width:650px;
+            width: auto;
+            padding:5px;
+            margin:5px;
+            box-sizing:border-box;
+            flex: 0 0 auto;
+        }
+    </style>
+    <paper-card id="card" style="background-color:[[color]];" heading="[[lesson]]">
+        <div class="card-content">
+            <template is="dom-repeat" items="{{tasks}}" id="tasksList" as="item">
+                <task-box task="{{item.task}}" isready="{{item.value}}" index="{{index}}"></task-box>
+            </template>
+        </div>
+    </paper-card>
+  </template>
+  <script>
+    Polymer({
+      is: 'task-card',
+        properties: {
+            lesson : String,
+            color : String,
+            tasks : {
+                type : Array,
+                value : function() { 
+                    return [];
+                },
+                observer:'checkForTasks',
+                notify:'true'
+            }
+        },
+        ready:function() {
+           this.checkForTasks();
+        },
+        checkForTasks : function () {
+            if(this.tasks.length > 0) {
+                this.$.card.style.display = "inline-block";
+                this.domHost.$.nothing.style.display = "none";
+            }
+            else {
+                this.$.card.style.display = "none";
+            }
+        },
+        addToArray : function(taskToInsert, valueToInsert) {
+            if(this.tasks.length >= 20) {
+                return; //MAXIMUM 20 TASKOV PROTIV DUDOSEROV
+            }
+            this.push('tasks', {task:taskToInsert, value:valueToInsert});
+            this.checkForTasks();
+        },
+        removeBox : function(index) {
+            this.splice('tasks', index, 1);
+            this.checkForTasks();
+        }
+    })
+  </script>
+</dom-module>
