@@ -1,4 +1,5 @@
-<dom-module id="message-profile-module">
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+ <dom-module id="message-profile-module">
   <template>
     <style include="wrapper-module">
         .rounded {
@@ -20,9 +21,12 @@
             border:0;
         }
         #newMessages {
-            color:#DB4437
-            --iron-icon-width:16px;
-            --iron-icon-height:16px;
+            color:#E53935;
+            --iron-icon-width:24px;
+            --iron-icon-height:24px;
+        }
+        #newmsgbadge {
+            --paper-badge-background:#B71C1C;
         }
         #messageCount {
             color:#DB4437;
@@ -43,12 +47,12 @@
        <div class="rounded" style="background-image:url([[imgsrc]])" item-icon></div>
         <paper-item-body two-line>
             <div>[[name]]</div>
-            <div secondary>[[msglast]]</div>
+            <div secondary>[[lastmsg]]</div>
         </paper-item-body>
         <div id="time">[[time]] <br></div>
         <div id="messages">
             <iron-icon icon="icons:markunread" id="newMessages"></iron-icon>
-            <span id="messageCount"></span>
+            <paper-badge for="newMessages" label="{{newmsg}}" id="newmsgbadge"></paper-badge>
         </div>
     </paper-icon-item>
     <hr>
@@ -58,21 +62,24 @@
       is: 'message-profile-module',
         properties: {
             imgsrc : String,
-            msglast : String,
             time : String,
             name : String,
             identifier : String,
-            newmessage : String
+            newmsg : String,
+            index : String,
+            lastmsg : String
         },
         ready : function() {
-            if(this.newmessage != "0") {
-                this.$.messageCount.textContent = this.newmessage;
+            if(this.newmsg=="0") {
+                this.$.newMessages.style.display="none";
+                this.$.newmsgbadge.style.display="none";
             }
             else {
-                this.$.newMessages.style.width="0px";
-                this.$.messageCount.style.width="0px";
+                this.$.newMessages.style.display="inline-block";
+                this.$.newmsgbadge.style.display="flex";
             }
         }
+
     })
   </script>
 </dom-module>
