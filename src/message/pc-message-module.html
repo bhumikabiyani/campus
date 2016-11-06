@@ -1,0 +1,165 @@
+<link rel="import" href="profiles-list.html">
+<link rel="import" href="messages-list.html">
+<link rel="import" href="avatar-box.html">
+<link rel="import" href="message-input.html">
+<link rel="import" href="profile-info.html">
+<link rel="import" href="message-write.html">
+<dom-module id="pc-message-module">
+    <template>
+    <style include="wrapper-module">
+        #card {
+            margin-top:5vh;
+            background-color:#fff;
+            height:90vh;
+            padding:5px;
+        }
+        #search {
+            display:inline-block;
+            padding:20px;
+            padding-top:5px;
+            height:10%;
+            border-bottom: 1px solid #ddd;
+        }
+        #profiles {
+            border-right:1px solid #ddd;
+            padding:0;
+        }
+        #dialog {
+            padding-left : 0;
+        }
+        hr {
+            border:0;
+            border-top: 1px solid #ddd;
+        }
+        #information {
+            display:inline-block;
+            vertical-align: top;
+            padding:5px;
+            height:10%;
+            border-bottom: 1px solid #ddd;
+            display:none;
+        }
+        #profileBoxes {
+            margin-top:20px;
+            padding:1px;
+            height:90%;
+        }
+        #messageBoxes {
+            margin-top:20px;
+            height:70%;
+            display:none;
+        }
+        #input {
+            vertical-align: bottom;
+            border-top: 1px solid #ddd;
+            height:10%;
+            display:none;
+        }
+        paper-fab {
+            position: fixed;
+            margin-left: 10px;
+            margin-right:10px;
+            margin-bottom:10px;
+            right:25px;
+            bottom:25px;
+            --paper-fab-background:#303F9F;
+        }
+    </style>
+    <message-write id="write" yourname=[[yourname]]></message-write>
+    <iron-grid>
+        <paper-card class="s10 offset-s1" id="card">
+            <div class="s4" id="profiles">
+                <div class="s12" id="search">
+                    <paper-input label="Search" id="searchInput" on-keydown="setSearchVal" no-label-float>
+                        <paper-icon-button icon="search" suffix></paper-icon-button>
+                    </paper-input>
+                </div>
+                <div class="s12" id="profileBoxes">
+                    <profiles-list profiles="{{profiles}}" yourname=[[yourname]] search=[[currentSearchVal]]></profiles-list>
+                </div>
+            </div>
+            <div class="s8" id="dialog">
+                <div class="s12" id="information">
+                    <profile-info id="info"></profile-info>
+                </div>
+                <div class="s8 offset-s2" id="openNew" style="display:flex; align-items:center; justify-content:center; color:#bbb">
+                    <iron-icon icon="communication:chat"></iron-icon> &nbsp; Please, open dialog or start a new dialog. <i class="em em-angel"></i>
+                </div>
+                <div class="s12" id="messageBoxes">
+                    <messages-list id="list" messages={{currentDialog}}></messages-list>
+                </div>
+                <div class="s12" id="input">
+                    <message-input></message-input>
+                </div>
+            </div>
+        </paper-card>
+    </iron-grid>
+    <paper-fab icon="create" style="display:absolute; bottom:0; right:0;" on-tap="openMsgWrite"></paper-fab>
+    </template>
+    <script>
+        Polymer({
+            is: 'pc-message-module',
+            properties: {
+                profiles: {
+                    type: Array,
+                    value: function() {
+                        return [];
+                    },
+                    notify: true
+                },
+                currentSearchVal: {
+                    type: String,
+                    value: ""
+                },
+                openedIndex: {
+                    type: String,
+                    value: ""
+                },
+                currentDialog: {
+                    type: Array,
+                    notify: true
+                },
+                yourname: {
+                    type: String,
+                    value: "Erzhan"
+                }
+            },
+            setSearchVal: function(e) {
+                this.currentSearchVal = this.$.searchInput.value;
+            },
+            openMsgWrite: function() {
+                this.$.write.open();
+            },
+            openDialog: function(index) {
+                this.$.information.style.display = "block";
+                this.$.messageBoxes.style.display = "block";
+                this.$.input.style.display = "block";
+                this.$.openNew.style.display = "none";
+                this.set('currentDialog', this.get('profiles.' + index + '.dialog'));
+                this.$.info.name = this.get('profiles.' + index + '.name');
+                this.$.info.imgsrc = "../../images/favicon.ico";
+                this.set('openedIndex', index);
+                this.set('profiles.' + index + '.newmsg', '0');
+                for (var i = 0; i < this.profiles[index].dialog.length; i++) {
+                    if (this.profiles[index].dialog[i].sender != this.yourname) {
+                        this.set('profiles.' + index + '.dialog.' + i + '.readen', "true");
+                    }
+                }
+                this.$.info.online = "Offline";
+            },
+            sendMessage: function(msg) {
+                var d = new Date();
+                var t = d.getHours() + ":" + d.getMinutes();
+                this.push('profiles.' + this.openedIndex + '.dialog', {
+                    sender: this.yourname,
+                    message: msg,
+                    time: t,
+                    readen: "false"
+                });
+                this.set('currentDialog', []);
+                this.set('currentDialog', this.get('profiles.' + this.openedIndex + '.dialog'));
+                this.set('profiles.' + this.openedIndex + '.lastmsg', this.yourname + " : " + msg);
+            }
+        })
+    </script>
+</dom-module>

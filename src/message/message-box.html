@@ -1,0 +1,79 @@
+<link rel="import" href="avatar-box.html">
+<dom-module id="message-box">
+<template>
+    <style include="wrapper-module">
+        #secondaryText {
+            text-transform:capitalize;
+            font-weight:500;
+            color:#111;
+            line-height:1.3em;
+            max-width:90%;
+            text-overflow: ellipsis;
+            overflow:hidden;
+            margin-left:50px;
+        }
+        #primaryText {
+            color:#222;
+            margin-left:50px;
+            width:85%;
+            word-wrap: break-word;
+        }
+        .avatar {
+            margin-right:0;
+        }
+        :host {
+            display:block;
+            position:relative;
+            width:100%;
+            font-size:14px;
+            min-height:72px;
+            z-index:0;
+        }
+        #time{
+            font-size:0.75em;
+            color:#919191;
+            float:right;
+        }
+        iron-icon {
+            width:12px;
+            height:12px;
+            color:#4CAF50;
+        }
+        #read {
+            float:left;
+            display:none;
+        }
+    </style>
+    <section layout horizontal>
+        <avatar-box class="avatar" url="../../images/favicon.ico" online="[[online]]"></avatar-box>
+        <div flex>
+            <div id="secondaryText">[[name]]
+                 <span id="time"><iron-icon id="read"icon="done-all"></iron-icon>&nbsp;[[time]]</span>
+            </div>
+            <div id="primaryText">[[message]]</div>
+        </div>
+    </section>
+    </template>
+    <script>
+        Polymer({
+            is: 'message-box',
+            properties : {
+                name : String,
+                message : String,
+                time : String,
+                readen : {
+                    type : String,
+                    observer:'setReaden'
+                }
+            },
+            setReaden:function() {
+                if(this.readen=="true") {
+                    this.$.read.style.display = "block";
+                }
+                else {
+                    this.$.read.style.display="none";
+                }
+            }
+        })
+    </script>
+</dom-module>

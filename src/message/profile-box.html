@@ -1,0 +1,60 @@
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="avatar-box.html">
+<dom-module id="profile-box">
+    <template>
+    <style include="wrapper-module">
+        paper-icon-item {
+            width:90%;
+            margin-bottom:10px;
+
+        }
+
+        #time {
+            color:#777;
+            font-size:12px;
+        }
+        #mailIcon {
+            color:firebrick;
+        }
+        #badge {
+            --paper-badge-background:darkred;
+        }
+    </style>
+        <paper-icon-item id="item" on-tap="openDialog">
+            <avatar-box url="../../images/favicon.ico" item-icon></avatar-box>
+            <paper-item-body>
+                <div>[[name]]</div>
+                <div secondary>[[lastmsg]]</div>
+            </paper-item-body>
+            <div id="new">
+                <iron-icon icon="mail" id="mailIcon"></iron-icon>
+                <paper-badge for="mailIcon" label=[[newmsg]] id="badge"></paper-badge>   
+            </div>
+        </paper-icon-item>
+    </template>
+    <script>
+        Polymer({
+            is: 'profile-box',
+            properties: {
+                name : String,
+                lastmsg : String,
+                newmsg : {
+                    type : String,
+                    observer:"newMsg"
+                },
+                index : String
+            },
+            openDialog : function() {
+                this.domHost.domHost.openDialog(this.index);
+            },
+            newMsg : function() {
+                if(this.newmsg == '0') {
+                    this.$.new.style.display="none";   
+                }
+                else {
+                    this.$.new.style.display="block";
+                }
+            }
+        })
+    </script>
+</dom-module>

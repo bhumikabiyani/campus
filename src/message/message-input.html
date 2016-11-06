@@ -1,0 +1,48 @@
+<link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
+
+<dom-module id="message-input">
+    <template>
+    <style include="wrapper-module">
+        paper-input {
+            color:#777;
+            width:100%;
+        }
+    </style>
+        <paper-input label="Write a message.." id="msg" no-label-float on-keydown="checkForEnter">
+            <paper-icon-button icon="attachment" prefix></paper-icon-button>
+            <paper-menu-button suffix>
+                <paper-icon-button icon="editor:insert-emoticon" class="dropdown-trigger"></paper-icon-button>
+                <div style="background-color:#fff" class="dropdown-content">
+                    <i class="em em-blush"></i>
+                </div>
+            </paper-menu-button>
+            
+            <paper-icon-button icon="send" suffix on-tap="send"></paper-icon-button>
+        </paper-input>
+        
+    </template>
+    <script>
+        Polymer({
+            is: 'message-input',
+            properties: {
+                target: {
+                    type: Object,
+                    value: function() {
+                        return this.$.msg;
+                    }
+                }
+            },
+            send: function() {
+                var msg = this.$.msg.value;
+                if (!msg.match(/[a-zA-Z0-9,.]/i)) return;
+                this.$.msg.value = "";
+                this.domHost.sendMessage(msg);
+            },
+            checkForEnter: function(e) {
+                if (e.keyCode === 13) {
+                    this.send();
+                }
+            }
+        })
+    </script>
+</dom-module>

@@ -1,0 +1,53 @@
+<link rel="import" href="profile-box.html">
+<dom-module id="profiles-list">
+    <template>
+    <style include="wrapper-module">
+    </style>
+    <div style="height:100%; overflow-y:auto; overflow-x:hidden;">
+    <!--<iron-list grid items=[[profiles]] as="profileBox">-->
+        <template is="dom-repeat" items={{profiles}} as="profileBox">
+            <profile-box name=[[profileBox.name]] lastmsg=[[profileBox.lastmsg]] newmsg=[[profileBox.newmsg]] index=[[index]]></profile-box>
+        </template>
+    <!--</iron-list>-->
+    </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'profiles-list',
+            properties: {
+                yourname: {
+                    type: String,
+                    value: ""
+                },
+                profiles: {
+                    type: Array,
+                    value: function() {
+                        return [];
+                    },
+                    notify: true
+                },
+                search: {
+                    type: String,
+                    value: ""
+                }
+            },
+            observers: [
+                'update(profiles.*)'
+            ],
+            update: function() {
+                for (var i = 0; i < this.profiles.length; i++) {
+                    var lastmsg = this.profiles[i].dialog[this.profiles[i].dialog.length - 1];
+                    var last = lastmsg.sender + " : " + lastmsg.message;
+                    this.set('profiles.' + i + '.lastmsg', last);
+                    var newMsg = 0;
+                    for (var j = 0; j < this.profiles[i].dialog.length; j++) {
+                        if (this.profiles[i].dialog[j].readen == "false" && this.profiles[i].dialog[j].sender != this.yourname) {
+                            newMsg++;
+                        }
+                    }
+                    this.set('profiles.' + i + '.newmsg', newMsg);
+                }
+            }
+        })
+    </script>
+</dom-module>

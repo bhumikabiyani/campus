@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="avatar-box.html">
+<dom-module id="profile-info">
+    <template>
+    <style include="wrapper-module">
+    </style>
+        <paper-icon-item style="float:right; width:95%;">
+            <avatar-box url=[[imgsrc]] online=[[online]] item-icon></avatar-box>
+            <paper-item-body>
+                <div>[[name]]</div>
+                <div secondary>[[online]]</div>
+            </paper-item-body>
+        <paper-menu-button> 
+            <paper-icon-button icon="more-vert" class="dropdown-trigger"></paper-icon-button>
+            <paper-menu class="dropdown-content">
+                <paper-item>Favorite</paper-item>
+                <paper-item>Remove from list</paper-item>
+            </paper-menu>
+        </paper-menu-button>
+        </paper-icon-item>
+    </template>
+    <script>
+        Polymer({
+            is: 'profile-info',
+            properties: {
+                name: String,
+                online: String,
+                imgsrc: String,
+                index: String
+            }
+        })
+    </script>
+</dom-module>

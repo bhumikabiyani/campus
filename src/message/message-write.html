@@ -1,0 +1,59 @@
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<dom-module id="message-write">
+    <template>
+    <style include="wrapper-module">
+        paper-dialog {
+            width:60vw;
+            max-height:60vh;
+        }
+    </style>
+        <paper-dialog id="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                <h2>Create new dialog</h2>
+                <paper-input label="Identifier or name" style="width:80%"  id="name"> <!--Zdes prikruti shtuku - poisk usera po id-->
+                    <paper-icon-button icon="search" suffix></paper-icon-button>
+                </paper-input>
+                <paper-input label="Your message" style="width:80%" id="msg">
+                  <paper-icon-button icon="attachment" suffix></paper-icon-button>
+                </paper-input>
+                <paper-button raised style="height:5vh; width:40%; margin-left:30%" on-tap="send">send</paper-button>
+        </paper-dialog>
+    </template>
+    <script>
+        Polymer({
+            is: 'message-write',
+            properties: {
+                yourname: String
+            },
+            open: function() {
+                this.$.dialog.open();
+            },
+            send: function() {
+                var n = this.$.name.value;
+                var m = this.$.msg.value;
+                var d = new Date();
+                var t = d.getHours() + ":" + d.getMinutes();
+                if (!m.match(/[\wa-zA-Z0-9,.а-яА-Я]+/g) || !n.match(/[a-zA-Z0-9,.]/i)) return;
+                var newItem = {
+                    name: n,
+                    dialog: [{
+                        sender: this.yourname,
+                        message: m,
+                        time: t,
+                        readen: "false"
+
+                    }]
+                };
+                for (var i = 0; i < this.domHost.profiles.length; i++) {
+                    if (newItem.name == this.domHost.profiles[i].name) {
+                        this.domHost.push('profiles.' + i + '.dialog', newItem.dialog[0]);
+                        this.$.dialog.close();
+                        return;
+                    }
+                }
+                this.domHost.push('profiles', newItem);
+                this.$.dialog.close();
+            }
+        })
+    </script>
+</dom-module>
