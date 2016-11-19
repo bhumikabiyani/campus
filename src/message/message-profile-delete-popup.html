@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<dom-module id="message-profile-delete-popup">
+    <template>
+    <style include="wrapper-module">
+        paper-dialog {
+            width:70vh;
+            height:auto;
+        }               
+        paper-button {
+            width:30%;
+            margin-left:13%;
+            height:5vh;
+        }     
+        #yes {
+           background-color:#EF5350;
+        }
+    </style>
+    
+    <paper-dialog id="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+        <h2>Are you sure you want to remove this dialog?</h2>
+        <paper-button raised id="yes" on-tap="remove">Yes</paper-button>
+        <paper-button raised on-tap="back">Back</paper-button>
+    </paper-dialog>
+    
+  </template>
+    <script>
+        Polymer({
+            is: 'message-profile-delete-popup',
+            show: function() {
+                this.$.dialog.open();
+            },
+            remove: function() {
+                this.$.dialog.close();
+                this.domHost.remove(true);
+                if (this.domHost.goBack !== void(0))
+                    this.domHost.goBack();
+            },
+            back: function() {
+                this.$.dialog.close();
+            }
+        })
+    </script>
+</dom-module>

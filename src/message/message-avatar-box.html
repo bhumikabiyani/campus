@@ -1,0 +1,44 @@
+<dom-module id="message-avatar-box">
+    <template>
+    <style include="wrapper-module">
+        #round {
+            background: #9e9e9e center center no-repeat;
+            background-size:contain;
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            position:relative;
+            margin-right:0;
+            float:left;
+        }
+        #online {
+            width:12px;
+            height:12px;
+            border-radius:50%;
+            position:absolute;
+            bottom:0;
+            right:0;
+        }
+    </style>
+    <div id="round" style="background-image:url([[url]]);"> 
+       <div id="online"></div>
+    </div>
+
+</template>
+    <script>
+        Polymer({
+            is: 'message-avatar-box',
+            properties: {
+                url: String,
+                online: Boolean
+            },
+            ready: function() {
+                if (this.online == "Online") {
+                    this.$.online.style.backgroundColor = "#4CAF50";
+                } else if (this.online = "Offline") {
+                    this.$.online.style.display = "none";
+                }
+            }
+        })
+    </script>
+</dom-module>

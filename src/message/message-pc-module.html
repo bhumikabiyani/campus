@@ -1,0 +1,233 @@
+<link rel="import" href="message-profile-list.html">
+<link rel="import" href="message-dialog-list.html">
+<link rel="import" href="message-avatar-box.html">
+<link rel="import" href="message-input.html">
+<link rel="import" href="message-profile-info.html">
+<link rel="import" href="message-input-new.html">
+<link rel="import" href="message-profile-delete-popup.html">
+<dom-module id="message-pc-module">
+    <template>
+    <style include="wrapper-module">
+        #card {
+            margin-top:5vh;
+            background-color:#fff;
+            height:90vh;
+            padding:5px;
+        }
+        #search {
+            display:inline-block;
+            padding:20px;
+            padding-top:5px;
+            height:11.7%;
+            border-bottom: 1px solid #ddd;
+        }
+        #profiles {
+            border-right:1px solid #ddd;
+            padding:0;
+        }
+        #dialog {
+            padding-left : 0;
+        }
+        hr {
+            border:0;
+            border-top: 1px solid #ddd;
+        }
+        #information {
+            vertical-align: top;
+            padding:5px;
+            height:10%;
+            border-bottom: 1px solid #ddd;
+            width:100%;
+        }
+        #profileBoxes {
+            margin-top:20px;
+            padding:1px;
+            height:85%;
+        }
+        #messageBoxes {
+            height:70%;
+            width:100%;
+            padding:10px;
+        }
+        #input {
+            vertical-align: bottom;
+            border-top: 1px solid #ddd;
+            height:15%;
+            width:100%;
+        }
+        paper-fab {
+            position: fixed;
+            margin-left: 10px;
+            margin-right:10px;
+            margin-bottom:10px;
+            right:25px;
+            bottom:25px;
+            --paper-fab-background:#303F9F;
+        }
+        .hidden {
+            display : none;
+        }
+        #openNew {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color:#bbb;
+        }
+    </style>
+    <message-input-new id="write" yourname=[[yourname]]></message-input-new>
+    <message-profile-delete-popup id="deletePopup"></message-profile-delete-popup>
+    <iron-grid>
+        <paper-card class="s10 offset-s1" id="card">
+            <div class="s4" id="profiles">
+                <div class="s12" id="search">
+                    <paper-input label="Search" id="searchInput" on-keydown="setSearchVal" no-label-float>
+                        <paper-icon-button icon="search" suffix></paper-icon-button>
+                    </paper-input>
+                </div>
+                <div class="s12" id="profileBoxes">
+                    <message-profile-list profiles="{{profiles}}" yourname=[[yourname]] search=[[currentSearchVal]] grouplist="false"></message-profile-list>
+                </div>
+            </div>
+            <div class="s8" id="dialog">
+                <div layout horizontal class="hidden" id="information">
+                    <message-profile-info id="info" index=[[openedIndex]]></message-profile-info>
+                </div>
+                <div class="s8 offset-s2" id="openNew">
+                    <div><iron-icon icon="communication:chat"></iron-icon>&nbsp;Please, open dialog or start a new dialog.</div>
+                </div>
+                <div layout horizontal class="hidden" id="messageBoxes">
+                    <message-dialog-list id="list" messages={{currentDialog}}></message-dialog-list>
+                </div>
+                <div layout horizontal class="hidden" id="input">
+                    <message-input></message-input>
+                </div>
+            </div>
+        </paper-card>
+    </iron-grid>
+    <paper-fab icon="create" style="display:absolute; bottom:0; right:0;" on-tap="openMsgWrite"></paper-fab>
+    <paper-toast text="added" id="toast"></paper-toast>
+    </template>
+    <script>
+        Polymer({
+            is: 'message-pc-module',
+            properties: {
+                profiles: {
+                    type: Array,
+                    //value: function() {
+                    //    return [];
+                    //},
+                    value: [{
+                        name: "Kekland",
+                        users: [{
+                            name: "Erzhan"
+                        }, {
+                            name: "Kekland"
+                        }],
+                        dialog: [{
+                            sender: "Kekland",
+                            message: "Hi!",
+                            time: "12:33"
+                        }]
+                    }],
+                    notify: true
+                },
+                currentSearchVal: {
+                    type: String,
+                    value: ""
+                },
+                openedIndex: {
+                    type: String,
+                    value: ""
+                },
+                currentDialog: {
+                    type: Array,
+                    value: function() {
+                        return [];
+                    },
+                    notify: true
+                },
+                yourname: {
+                    type: String,
+                    value: "Erzhan"
+                }
+            },
+            setSearchVal: function(e) {
+                this.currentSearchVal = this.$.searchInput.value;
+            },
+            openMsgWrite: function() {
+                this.$.write.open();
+            },
+            openDialog: function(index) {
+                this.$.information.class = "s12";
+                this.$.messageBoxes.class = "s12";
+                this.$.input.class = "s12";
+                this.$.openNew.class = "s0";
+                this.$.info.name = this.get('profiles.' + index + '.name');
+                this.$.info.imgsrc = "../../images/favicon.ico";
+                this.set('openedIndex', index);
+                this.set('profiles.' + index + '.newmsg', '0');
+                this.currentDialog = [];
+                for (var i = 0; i < this.profiles[index].dialog.length; i++) {
+                    if (this.profiles[index].dialog[i].sender != this.yourname) {
+                        this.set('profiles.' + index + '.dialog.' + i + '.readen', "true");
+                        this.set('profiles.' + index + '.dialog.' + i + '.position', "left");
+                    } else {
+                        this.set('profiles.' + index + '.dialog.' + i + '.position', "right");
+                    }
+                    this.push('currentDialog', 'profiles.' + index + '.dialog.' + i);
+                }
+                this.$.info.set('addInfo', this.get('profiles.' + index + '.addInfo'));
+                this.$.info.set('users', this.get('profiles.' + index + '.users'));
+                this.set('currentDialog', this.get('profiles.' + index + '.dialog')); //!!!
+                this.openCurrDialog();
+                this.overrideDirtyCheckingCurrDialog();
+            },
+            sendMessage: function(msg) {
+                var d = new Date();
+                var t = d.toTimeString().split(' ')[0];
+                this.push('profiles.' + this.openedIndex + '.dialog', {
+                    sender: this.yourname,
+                    message: msg,
+                    time: t,
+                    position: "right",
+                    readen: "false"
+                });
+                this.set('currentDialog', this.get('profiles.' + this.openedIndex + '.dialog')); //!!!
+                this.set('profiles.' + this.openedIndex + '.lastmsg', this.yourname + " : " + msg);
+                this.overrideDirtyCheckingCurrDialog();
+            },
+            remove: function(agree) {
+                if (!agree) {
+                    this.$.deletePopup.show();
+                    return;
+                }
+                this.$.toast.text = "Dialog or group with " + this.profiles[this.openedIndex].name + " removed.";
+                this.$.toast.open();
+                this.splice('profiles', this.openedIndex, 1);
+                this.openedIndex = "";
+                this.set("currentDialog", []);
+                this.closeCurrDialog();
+                this.overrideDirtyCheckingCurrDialog();
+            },
+            overrideDirtyCheckingCurrDialog: function() {
+                var arr = this.currentDialog;
+                this.currentDialog = [];
+                this.currentDialog = arr;
+            },
+            closeCurrDialog: function() {
+                this.$.openNew.className = "s8 offset-s2";
+                this.$.openNew.style.display = "flex";
+                this.$.information.style.display = "none";
+                this.$.messageBoxes.style.display = "none";
+                this.$.input.style.display = "none";
+            },
+            openCurrDialog: function() {
+                this.$.openNew.className = "s0";
+                this.$.openNew.style.display="none";
+                this.$.information.style.display = "block";
+                this.$.messageBoxes.style.display = "block";
+                this.$.input.style.display = "block";
+            }
+        })
+    </script>
+</dom-module>

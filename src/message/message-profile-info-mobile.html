@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="message-avatar-box.html">
+<dom-module id="message-profile-info-mobile">
+    <template>
+    <style include="wrapper-module">
+        paper-toolbar {
+            --paper-toolbar-background:transparent;
+            color:black;
+        }
+    </style>
+    <paper-toolbar>
+        <paper-icon-button icon="arrow-back" on-tap="back"></paper-icon-button>
+        <paper-icon-item class="title">
+            <message-avatar-box url=[[imgsrc]] online=[[online]] item-icon></message-avatar-box>
+            <paper-item-body>
+                <div>[[name]]</div>
+                <div secondary on-tap="openProfilesList">[[addInfo]]</div>
+            </paper-item-body>
+        </paper-icon-item>
+        <paper-menu-button id="menu"> 
+            <paper-icon-button icon="more-vert" class="dropdown-trigger"></paper-icon-button>
+            <paper-menu class="dropdown-content">
+                <paper-item on-tap="remove">Remove from list</paper-item>
+            </paper-menu>
+        </paper-menu-button>
+        </paper-icon-item>
+    </paper-toolbar>
+    <paper-dialog id="profiles"  entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+            <message-profile-list grouplist="true" profiles=[[users]]></message-profile-list>
+        </paper-dialog>
+    </template>
+    <script>
+        Polymer({
+            is: 'message-profile-info-mobile',
+            properties: {
+                name: String,
+                addInfo: String,
+                imgsrc: String,
+                index: String,
+                users: {
+                    type: Array,
+                    value: function() {
+                        return [];
+                    }
+                },
+                groupUser: String
+            },
+            openProfilesList: function() {
+                if (this.addInfo.indexOf("members") !== -1) {
+                    this.$.profiles.open();
+                }
+            },
+            remove: function() {
+                this.domHost.remove(false);
+                this.$.menu.close();
+            },
+            back: function() {
+                this.domHost.goBack();
+            }
+        })
+    </script>
+</dom-module>

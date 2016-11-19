@@ -1,0 +1,56 @@
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="message-avatar-box.html">
+<link rel="import" href="message-profile-list.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<dom-module id="message-profile-info">
+    <template>
+    <style include="wrapper-module">
+        #profiles {
+            width:60vw;
+            height:60vh;
+        }
+    </style>
+        <paper-icon-item style="float:right; width:95%;">
+            <message-avatar-box url=[[imgsrc]] online=[[online]] item-icon></message-avatar-box>
+            <paper-item-body>
+                <div>[[name]]</div>
+                <div secondary on-tap="openProfilesList">[[addInfo]]</div>
+        </paper-item-body>
+        <paper-menu-button id="menu"> 
+            <paper-icon-button icon="more-vert" class="dropdown-trigger"></paper-icon-button>
+            <paper-menu class="dropdown-content">
+                <paper-item on-tap="remove">Remove from list</paper-item>
+            </paper-menu>
+        </paper-menu-button>
+        </paper-icon-item>
+        <paper-dialog id="profiles"  entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+            <message-profile-list grouplist="true" profiles=[[users]]></message-profile-list>
+        </paper-dialog>
+    </template>
+    <script>
+        Polymer({
+            is: 'message-profile-info',
+            properties: {
+                name: String,
+                addInfo: String,
+                imgsrc: String,
+                index: String,
+                users: {
+                    type: Array,
+                    value: function() {
+                        return [];
+                    }
+                },
+                groupUser: String
+            },
+            openProfilesList: function() {
+                if (this.addInfo.indexOf("members") !== -1) {
+                    this.$.profiles.open();
+                }
+            },
+            remove: function() {
+                this.domHost.remove(false);
+            }
+        })
+    </script>
+</dom-module>

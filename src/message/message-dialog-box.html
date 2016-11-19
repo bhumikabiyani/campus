@@ -1,0 +1,110 @@
+<link rel="import" href="message-avatar-box.html">
+<dom-module id="message-dialog-box">
+
+    <template>
+    <style include="wrapper-module">
+        #secondaryText {
+            text-transform:capitalize;
+            font-weight:500;
+            color:#111;
+            line-height:1.3em;
+            text-overflow: ellipsis;
+            overflow:hidden;
+        }
+        #primaryText {
+            color:#222;
+            width:85%;
+            word-wrap: break-word;
+        }
+        :host {
+            display:block;
+            position:relative;
+            width:100%;
+            font-size:14px;
+            min-height:60px; 
+            z-index:0;
+        }
+        #time{
+            font-size:0.75em;
+            color:#919191;
+            float:right;
+        }
+        iron-icon {
+            width:12px;
+            height:12px;
+            color:#4CAF50;
+        }
+        #read {
+            float:left;
+            display:none;
+        }
+        #sect {
+            margin:5px;
+            box-shadow: 2px 2px 2px rgba(0,0,0,0.1);
+            max-width:70%;
+            min-width:30%;
+            padding:10px;
+            background-color:rgb(245, 245, 245);
+            border-radius:1px;
+            float:left;
+            margin-left:0;
+            margin-right:0;
+        }
+        #triangle {
+            width: 0; 
+            height: 0; 
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent; 
+            border-right:10px solid rgb(245, 245, 245);
+            float:left;
+            margin-top:6px;
+        }
+    </style>
+    <div id="triangle"></div>
+    <section on-tap="hoveredChangeInfo" id="sect">
+        <div flex>
+            <div id="secondaryText">[[name]]
+                 <span id="time"><iron-icon id="read"icon="done-all"></iron-icon>&nbsp;[[time]]</span>
+            </div>
+            <div id="primaryText">[[message]]</div>
+        </div>
+    </section>
+    </template>
+    <script>
+        Polymer({
+            is: 'message-dialog-box',
+            properties: {
+                name: String,
+                message: String,
+                time: String,
+                readen: {
+                    type: String,
+                    observer: 'setReaden'
+                },
+                position: {
+                    type: String,
+                    value: "left",
+                    observer: 'setPos'
+                }
+            },
+            setPos: function() {
+                console.log(this.position);
+                if (this.position == "right") {
+                    this.$.sect.style.float = "right";
+                    this.$.triangle.style.float = "right";
+                    this.$.triangle.style.borderLeft = "10px solid #A5D6A7";
+                    this.$.triangle.style.borderRight = "10px solid transparent"
+                    this.$.sect.style.boxShadow = "-2px 2px 2px rgba(0,0,0,0.1)";
+                    this.$.sect.style.backgroundColor = "#A5D6A7";
+                }
+            },
+            setReaden: function() {
+                if (this.readen == "true") {
+                    this.$.read.style.display = "block";
+                } else {
+                    this.$.read.style.display = "none";
+                }
+            }
+        })
+    </script>
+</dom-module>

@@ -1,0 +1,411 @@
+<link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="message-emoji-box.html">
+<dom-module id="message-input">
+    <template>
+    <style include="wrapper-module">
+        paper-input {
+            color:#777;
+            width:90%;
+            height:60%;
+            margin-left:5%;
+        }
+        #emojiTarget {
+            width:20vw;
+            height:20vh;
+        }
+    </style>
+        <paper-input label="Write a message.." id="msg" no-label-float on-keydown="checkForEnter">
+            <paper-menu-button id="menuButton" prefix vertical-align="bottom" horizontal-align="right">
+                <paper-icon-button icon="editor:insert-emoticon" class="dropdown-trigger"></paper-icon-button>
+                <div style="background-color:#fff" class="dropdown-content" id="emojiTarget">
+                    
+                </div>
+            </paper-menu-button>
+            <paper-icon-button icon="send" suffix on-tap="send"></paper-icon-button>
+        </paper-input>
+        
+    </template>
+    <script>
+        Polymer({
+            is: 'message-input',
+            properties: {
+                target: {
+                    type: Object,
+                    value: function() {
+                        return this.$.msg;
+                    }
+                },
+                emojis: {
+                    type: Array,
+                    value: [{
+                        emoji: "😂"
+                    }, {
+                        emoji: "😃"
+                    }, {
+                        emoji: "😄"
+                    }, {
+                        emoji: "😆"
+                    }, {
+                        emoji: "😔"
+                    }, {
+                        emoji: "😖"
+                    }, {
+                        emoji: "😏"
+                    }, {
+                        emoji: "😉"
+                    }, {
+                        emoji: "😊"
+                    }, {
+                        emoji: "😖"
+                    }, {
+                        emoji: "😒"
+                    }, {
+                        emoji: "😔"
+                    }, {
+                        emoji: "😒"
+                    }, {
+                        emoji: "😓"
+                    }, {
+                        emoji: "😡"
+                    }, {
+                        emoji: "😢"
+                    }, {
+                        emoji: "😣"
+                    }, {
+                        emoji: "😨"
+                    }, {
+                        emoji: "😩"
+                    }, {
+                        emoji: "😉"
+                    }, {
+                        emoji: "😊"
+                    }, {
+                        emoji: "😋"
+                    }, {
+                        emoji: "😍"
+                    }, {
+                        emoji: "😜"
+                    }, {
+                        emoji: "😝"
+                    }, {
+                        emoji: "😭"
+                    }, {
+                        emoji: "😰"
+                    }, {
+                        emoji: "😱"
+                    }, {
+                        emoji: "😠"
+                    }, {
+                        emoji: "🚲"
+                    }, {
+                        emoji: "🚩"
+                    }, {
+                        emoji: "🚪"
+                    }, {
+                        emoji: "🚫"
+                    }, {
+                        emoji: "🚌"
+                    }, {
+                        emoji: "🚕"
+                    }, {
+                        emoji: "🚗"
+                    }, {
+                        emoji: "🚙"
+                    }, {
+                        emoji: "🚚"
+                    }, {
+                        emoji: "🚧"
+                    }, {
+                        emoji: "⚽"
+                    }, {
+                        emoji: "⚾"
+                    }, {
+                        emoji: "⚫"
+                    }, {
+                        emoji: "⚪"
+                    }, {
+                        emoji: "⛄"
+                    }, {
+                        emoji: "⛅"
+                    }, {
+                        emoji: "⛔"
+                    }, {
+                        emoji: "⛵"
+                    }, {
+                        emoji: "⛽"
+                    }, {
+                        emoji: "⬛"
+                    }, {
+                        emoji: "⬜"
+                    }, {
+                        emoji: "⭕"
+                    }, {
+                        emoji: "🌇"
+                    }, {
+                        emoji: "🌈"
+                    }, {
+                        emoji: "🌏"
+                    }, {
+                        emoji: "🌕"
+                    }, {
+                        emoji: "🌙"
+                    }, {
+                        emoji: "🌟"
+                    }, {
+                        emoji: "🌠"
+                    }, {
+                        emoji: "🌱"
+                    }, {
+                        emoji: "🌿"
+                    }, {
+                        emoji: "🍀"
+                    }, {
+                        emoji: "🍅"
+                    }, {
+                        emoji: "🍆"
+                    }, {
+                        emoji: "🍎"
+                    }, {
+                        emoji: "🍏"
+                    }, {
+                        emoji: "🍒"
+                    }, {
+                        emoji: "🍓"
+                    }, {
+                        emoji: "🍔"
+                    }, {
+                        emoji: "🍕"
+                    }, {
+                        emoji: "🍗"
+                    }, {
+                        emoji: "🍜"
+                    }, {
+                        emoji: "🍟"
+                    }, {
+                        emoji: "🍞"
+                    }, {
+                        emoji: "🍩"
+                    }, {
+                        emoji: "🍫"
+                    }, {
+                        emoji: "🍪"
+                    }, {
+                        emoji: "🍳"
+                    }, {
+                        emoji: "🍲"
+                    }, {
+                        emoji: "🍷"
+                    }, {
+                        emoji: "🍸"
+                    }, {
+                        emoji: "🎅"
+                    }, {
+                        emoji: "🎃"
+                    }, {
+                        emoji: "🎂"
+                    }, {
+                        emoji: "🎁"
+                    }, {
+                        emoji: "🎇"
+                    }, {
+                        emoji: "🎈"
+                    }, {
+                        emoji: "🎓"
+                    }, {
+                        emoji: "🎨"
+                    }, {
+                        emoji: "🎮"
+                    }, {
+                        emoji: "🎱"
+                    }, {
+                        emoji: "🎵"
+                    }, {
+                        emoji: "🎸"
+                    }, {
+                        emoji: "🎺"
+                    }, {
+                        emoji: "🏁"
+                    }, {
+                        emoji: "🎾"
+                    }, {
+                        emoji: "🏆"
+                    }, {
+                        emoji: "🏬"
+                    }, {
+                        emoji: "💤"
+                    }, {
+                        emoji: "💧"
+                    }, {
+                        emoji: "💩"
+                    }, {
+                        emoji: "💰"
+                    }, {
+                        emoji: "📌"
+                    }, {
+                        emoji: "📏"
+                    }, {
+                        emoji: "📐"
+                    }, {
+                        emoji: "📑"
+                    }, {
+                        emoji: "📔"
+                    }, {
+                        emoji: "📕"
+                    }, {
+                        emoji: "📖"
+                    }, {
+                        emoji: "📗"
+                    }, {
+                        emoji: "📘"
+                    }, {
+                        emoji: "📙"
+                    }, {
+                        emoji: "📚"
+                    }, {
+                        emoji: "📜"
+                    }, {
+                        emoji: "📝"
+                    }, {
+                        emoji: "📞"
+                    }, {
+                        emoji: "📫"
+                    }, {
+                        emoji: "📱"
+                    }, {
+                        emoji: "📷"
+                    }, {
+                        emoji: "📹"
+                    }, {
+                        emoji: "🔎"
+                    }, {
+                        emoji: "🔑"
+                    }, {
+                        emoji: "🔔"
+                    }, {
+                        emoji: "🔖"
+                    }, {
+                        emoji: "🔗"
+                    }, {
+                        emoji: "🔥"
+                    }, {
+                        emoji: "🔦"
+                    }, {
+                        emoji: "🔧"
+                    }, {
+                        emoji: "🔪"
+                    }, {
+                        emoji: "🔴"
+                    }, {
+                        emoji: "🔵"
+                    }, {
+                        emoji: "🔶"
+                    }, {
+                        emoji: "🔷"
+                    }, {
+                        emoji: "🕔"
+                    }, {
+                        emoji: "🗽"
+                    }, {
+                        emoji: "🗼"
+                    }, {
+                        emoji: "😇"
+                    }, {
+                        emoji: "😐"
+                    }, {
+                        emoji: "😑"
+                    }, {
+                        emoji: "😟"
+                    }, {
+                        emoji: "😛"
+                    }, {
+                        emoji: "😦"
+                    }, {
+                        emoji: "😟"
+                    }, {
+                        emoji: "😧"
+                    }, {
+                        emoji: "😮"
+                    }, {
+                        emoji: "😯"
+                    }, {
+                        emoji: "😴"
+                    }, {
+                        emoji: "😶"
+                    }, {
+                        emoji: "🚁"
+                    }, {
+                        emoji: "🚆"
+                    }, {
+                        emoji: "🚈"
+                    }, {
+                        emoji: "🚊"
+                    }, {
+                        emoji: "🚖"
+                    }, {
+                        emoji: "🚎"
+                    }, {
+                        emoji: "🚐"
+                    }, {
+                        emoji: "🚛"
+                    }, {
+                        emoji: "🚝"
+                    }, {
+                        emoji: "🚜"
+                    }, {
+                        emoji: "🚦"
+                    }, {
+                        emoji: "🛁"
+                    }, {
+                        emoji: "🛄"
+                    }, {
+                        emoji: "🌍"
+                    }, {
+                        emoji: "🌎"
+                    }, {
+                        emoji: "🌚"
+                    }, {
+                        emoji: "🌝"
+                    }, {
+                        emoji: "🌐"
+                    }, {
+                        emoji: "🌲"
+                    }, {
+                        emoji: "🌳"
+                    }, {
+                        emoji: "🍋"
+                    }, {
+                        emoji: "🐕"
+                    }, {
+                        emoji: "🐓"
+                    }, {
+                        emoji: "🐖"
+                    }, {
+                        emoji: "🔕"
+                    }]
+                }
+            },
+            ready: function() {
+                for (var i = 0; i < this.emojis.length; i++) {
+                    var item = document.createElement('message-emoji-box');
+                    this.$.emojiTarget.appendChild(item);
+                    item.emoji = this.emojis[i].emoji;
+                    item.update();
+                }
+            },
+            addEmoji: function(em) {
+                this.$.msg.value = this.$.msg.value + " " + em + " ";
+            },
+            send: function() {
+                var msg = this.$.msg.value;
+                if (!/\S/.test(msg)) return;
+                this.$.msg.value = "";
+                this.domHost.sendMessage(msg);
+            },
+            checkForEnter: function(e) {
+                if (e.keyCode === 13) {
+                    this.send();
+                }
+            }
+        })
+    </script>
+</dom-module>

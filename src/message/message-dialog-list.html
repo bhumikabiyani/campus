@@ -1,0 +1,32 @@
+<link rel="import" href="message-dialog-box.html">
+<dom-module id="message-dialog-list">
+    <template>
+    <style include="wrapper-module">
+    </style>
+    <div id="wrap" style="height:100%; overflow-y:auto; overflow-x:hidden;">
+        <iron-list id="list" items={{messages}} as="messageBox" scroll-target="wrap">
+            <template id="listT">
+                <message-dialog-box position=[[messageBox.position]] name=[[messageBox.sender]] message=[[messageBox.message]] time=[[messageBox.time]] readen=[[messageBox.readen]]></message-dialog-box>
+            </template>
+    </iron-list>
+    </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'message-dialog-list',
+            properties: {
+                messages: {
+                    type: Array,
+                    value: function() {
+                        return [];
+                    },
+                    notify: true,
+                    observer: 'update'
+                },
+            },
+            update: function() {
+                this.$.list.scrollToIndex(this.messages.length - 1);
+            }
+        })
+    </script>
+</dom-module>

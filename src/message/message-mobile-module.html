@@ -1,0 +1,244 @@
+<link rel="import" href="../../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-database-behavior.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="message-profile-list.html">
+<link rel="import" href="message-dialog-list.html">
+<link rel="import" href="message-avatar-box.html">
+<link rel="import" href="message-input-mobile.html">
+<link rel="import" href="message-profile-info-mobile.html">
+<link rel="import" href="message-input-new.html">
+<link rel="import" href="message-profile-delete-popup.html">
+<dom-module id="message-mobile-module">
+    <template>
+    <style include="wrapper-module">
+        paper-fab {
+            position: absolute;
+            margin-right:10px;
+            margin-bottom:10px;
+            right:0;
+            bottom:0;
+            --paper-fab-background:#303F9F;
+        }
+        paper-card {
+            height:100vh;
+            padding:20px;
+        }
+        #search {
+            display:block;
+            padding:20px;
+            padding-top:5px;
+            height:10%;
+        }
+        #searchInput {
+            width:100%;
+        }
+        #profiles {
+            height:90vh;
+            margin-top:10px;
+            padding:0;
+        }
+        #dialog {
+            height:100%;
+            padding-left : 0;
+            display:none;
+        }
+        hr {
+            border:0;
+            border-top: 1px solid #ddd;
+        }
+        #information {
+            vertical-align: top;
+            padding:5px;
+            height:10%;
+        }
+        #profileBoxes {
+            margin-top:20px;
+            padding:1px;
+            height:80%;
+        }
+        #messageBoxes {
+            margin-top:20px;
+            height:80%;
+        }
+        #input {
+            position:absolute;
+            bottom:0;    
+            width:90vw;
+            margin-left:auto;
+            margin-right:auto;
+            padding:0;
+            height:10%;
+        }
+        #openNew {
+            display: flex;
+            position:absolute;
+            top:50%;
+            justify-content: center;
+            align-items: center;
+            color:#bbb;
+        }
+    </style>
+    <message-input-new id="write" yourname=[[yourname]]></message-input-new>
+    <neon-animated-pages entry-animation=[[entryanimation]] exit-animation=[[exitanimation]] selected=[[selected]]>
+        <neon-animatable>
+            <paper-card>
+                <iron-grid style="height:90vh">
+                    <div id="profiles" class="s12">
+                        <div id="search" class="s10 offset-s1">
+                            <paper-input label="Search" id="searchInput" on-keydown="setSearchVal" no-label-float>
+                                <paper-icon-button icon="search" suffix></paper-icon-button>
+                            </paper-input>
+                        </div>
+                        <div class="s8 offset-s2" id="openNew" style="">
+                            <iron-icon icon="communication:chat"></iron-icon> &nbsp;Create new dialog.
+                        </div>
+                        <div class="s10 offset-s1" id="profileBoxes">
+                            <message-profile-list profiles="{{profiles}}" yourname=[[yourname]] search=[[currentSearchVal]]></message-profile-list>
+                        </div>
+                    </div>
+                    <paper-fab icon="create" on-tap="openMsgWrite"></paper-fab>
+                </iron-grid>
+            </paper-card>
+        </neon-animatable>
+        <neon-animatable>
+            <iron-grid>
+                <paper-card>
+                    <div id="dialog" class="s12">
+                       <div id="information" class="s12">
+                           <message-profile-info-mobile id="info"></message-profile-info-mobile>
+                       </div>
+                       <div id="messageBoxes" class="s12">
+                          <message-dialog-list id="list" messages={{currentDialog}}></message-dialog-list>
+                      </div>
+                      <div id="input" class="s12">
+                          <message-input-mobile></message-input-mobile>
+                      </div>
+                   </div>
+                </paper-card>
+            </iron-grid>
+        </neon-animatable>
+    </neon-animated-pages>
+    <message-profile-delete-popup id="deletePopup"></message-profile-delete-popup>
+    </template>
+    <script>
+        Polymer({
+            is: 'message-mobile-module',
+            properties: {
+                entryanimation: String,
+                exitanimation: String,
+                selected: {
+                    type: String,
+                    value: "0"
+                },
+                profiles: {
+                    type: Array,
+                    //value: function() {
+                    //    return [];
+                    //},
+                    value: [{
+                        name: "Kekland",
+                        users: [{
+                            name: "Erzhan"
+                        }, {
+                            name: "Kekland"
+                        }],
+                        dialog: [{
+                            sender: "Kekland",
+                            message: "Hi!",
+                            time: "12:33"
+                        }]
+                    }],
+                    notify: true
+                },
+                currentSearchVal: {
+                    type: String,
+                    value: ""
+                },
+                openedIndex: {
+                    type: String,
+                    value: ""
+                },
+                currentDialog: {
+                    type: Array,
+                    notify: true
+                },
+                yourname: {
+                    type: String,
+                    value: "Erzhan"
+                }
+            },
+            observers: [
+                'checkForItems(profiles.*)'
+            ],
+            checkForItems: function() {
+                if (this.profiles.length > 0) {
+                    this.$.openNew.style.display = "none";
+                }
+            },
+            goBack: function() {
+                this.entryanimation = 'slide-from-left-animation';
+                this.exitanimation = 'slide-right-animation';
+                this.selected = '0';
+            },
+            goInto: function() {
+                this.entryanimation = 'slide-from-right-animation';
+                this.exitanimation = 'slide-left-animation';
+                this.selected = '1';
+            },
+            setSearchVal: function(e) {
+                this.currentSearchVal = this.$.searchInput.value;
+            },
+            openMsgWrite: function() {
+                this.$.write.open();
+            },
+            openDialog: function(index) {
+                this.$.dialog.style.display = "block";
+                this.$.info.name = this.get('profiles.' + index + '.name');
+                this.$.info.imgsrc = "../../images/favicon.ico";
+                this.set('openedIndex', index);
+                this.set('profiles.' + index + '.newmsg', '0');
+                for (var i = 0; i < this.profiles[index].dialog.length; i++) {
+                    if (this.profiles[index].dialog[i].sender != this.yourname) {
+                        this.set('profiles.' + index + '.dialog.' + i + '.readen', "true");
+                        this.set('profiles.' + index + '.dialog.' + i + '.position', "left");
+                    } else {
+                        this.set('profiles.' + index + '.dialog.' + i + '.position', "right");
+                    }
+                }
+                this.$.info.set('addInfo', this.get('profiles.' + index + '.addInfo'));
+                this.$.info.set('users', this.get('profiles.' + index + '.users'));
+                this.set('currentDialog', []);
+                this.set('currentDialog', this.get('profiles.' + index + '.dialog')); //!!!
+                this.goInto();
+            },
+            sendMessage: function(msg) {
+                var d = new Date();
+                var t = d.getHours() + ":" + d.getMinutes();
+                this.push('profiles.' + this.openedIndex + '.dialog', {
+                    sender: this.yourname,
+                    message: msg,
+                    time: t,
+                    position: "right",
+                    readen: "false"
+                });
+                this.set('currentDialog', []);
+                this.set('currentDialog', this.get('profiles.' + this.openedIndex + '.dialog'));
+                this.set('profiles.' + this.openedIndex + '.lastmsg', this.yourname + " : " + msg);
+                this.$.openNew.style.display = "none";
+            },
+            remove: function(agree) {
+                if (!agree) {
+                    this.$.deletePopup.show();
+                    return;
+                }
+                this.splice('profiles', this.openedIndex, 1);
+                this.openedIndex = "";
+                this.set("currentDialog", []);
+                if (this.profiles.length == 0) {
+                    this.$.openNew.style.display = "flex";
+                }
+            }
+        })
+    </script>
+</dom-module>

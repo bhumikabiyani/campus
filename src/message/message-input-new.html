@@ -1,0 +1,117 @@
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<dom-module id="message-input-new">
+    <template>
+    <style include="wrapper-module">
+        #dialog {
+            width:60vw;
+            max-height:60vh;
+        }
+        #groupName {
+            width:40vw;
+            max-height:40vh;
+        }
+        .horizCenter {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width:90%;
+        }
+    </style>
+        <paper-dialog id="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                <h2>Create new dialog</h2>
+                <paper-input label="Identifier or name (For dialog attach id's with comma)" class="horizCenter" id="name"> <!--Zdes prikruti shtuku - poisk usera po id-->
+                    <paper-icon-button icon="search" suffix></paper-icon-button>
+                </paper-input>
+                <paper-input label="Your message" class="horizCenter" id="msg">
+                  <paper-icon-button icon="attachment" suffix></paper-icon-button>
+                </paper-input>
+                <paper-button raised style="height:5vh; width:40%; margin-left:30%" on-tap="checkForGroup">send</paper-button>
+        </paper-dialog>
+        <paper-dialog id="groupNameDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+            <h2>Group name</h2>
+            <paper-input label="Group name" style="width:80%" id="groupName"></paper-input>
+            <paper-button raised style="height:5vh; width:40%; margin-left:30%" on-tap="send">Send</paper-button>
+            <paper-button raised style="height:5vh; width:40%; margin-left:30%" on-tap="back">Back</paper-button>
+        </paper-dialog>
+    </template>
+    <script>
+        Polymer({
+            is: 'message-input-new',
+            properties: {
+                yourname: String
+            },
+            open: function() {
+                this.$.dialog.open();
+            },
+            back: function() {
+                this.$.groupNameDialog.close();
+            },
+            checkForGroup: function() {
+                var names = this.$.name.value.replace(' ', '').split(',');
+                var clearedNames = [];
+                for (var i = 0; i < names.length; i++) {
+                    //Check for identical items
+                    if (clearedNames.indexOf(names[i]) == -1) {
+                        clearedNames.push(names[i]);
+                    }
+                }
+                if (clearedNames.length > 1) {
+                    this.$.groupNameDialog.open();
+                } else {
+                    this.send();
+                }
+            },
+            send: function() {
+                var n = this.$.name.value;
+                var names = this.$.name.value.replace(' ', '').split(',');
+                var clearedNames = [];
+                for (var i = 0; i < names.length; i++) {
+                    //Check for identical items
+                    if (clearedNames.indexOf(names[i]) == -1) {
+                        clearedNames.push(names[i]);
+                    }
+                }
+                var m = this.$.msg.value;
+                var d = new Date();
+                var t = d.getHours() + ":" + d.getMinutes();
+                if (!/\S/.test(m) || !/\S/.test(n)) return;
+                var newItem = {
+                    name: "",
+                    users: [],
+                    dialog: [{
+                        sender: this.yourname,
+                        message: m,
+                        time: t,
+                        readen: "false"
+                    }],
+                    addInfo: "Offline"
+                };
+                newItem.users.push({
+                    name: this.yourname
+                });
+                for (var i = 0; i < clearedNames.length; i++) {
+                    newItem.users.push({
+                        name: clearedNames[i]
+                    });
+                }
+                if (clearedNames.length > 1) {
+                    newItem.name = this.$.groupName.value;
+                    newItem.addInfo = newItem.users.length + " members";
+                } else {
+                    newItem.name = clearedNames[0];
+                }
+                for (var i = 0; i < this.domHost.profiles.length; i++) {
+                    if (newItem.name == this.domHost.profiles[i].name) {
+                        this.domHost.push('profiles.' + i + '.dialog', newItem.dialog[0]);
+                        this.$.dialog.close();
+                        return;
+                    }
+                }
+                this.domHost.push('profiles', newItem);
+                this.$.groupNameDialog.close();
+                this.$.dialog.close();
+            }
+        })
+    </script>
+</dom-module>
